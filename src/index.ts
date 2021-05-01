@@ -23,6 +23,11 @@ envConfig();
 const PORT: number = Number(process.env.PORT) || 3000;
 const HOST: string = process.env.HOST || "localhost";
 
+// importing routes
+
+import {route as userRoute} from './routes/userRoute';
+app.use('/users', userRoute);
+
 app.listen(PORT, HOST, async () => {
     console.log(`server running https://${HOST}:${PORT}`);
     await connect(String(process.env.MONGO_URI));

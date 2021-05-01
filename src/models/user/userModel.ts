@@ -1,4 +1,3 @@
-import * as mongoose from "mongoose";
 import {Schema, Model, model} from "mongoose";
 import {IUser} from "./IUser";
 
