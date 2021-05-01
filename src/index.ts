@@ -1,6 +1,6 @@
 // importing packages
-
 import {Response, Request, NextFunction, Router, Express, Application} from 'express';
+import {connect} from "./configs/db.config";
 
 const express = require('express');
 const cors = require('cors');
@@ -23,5 +23,6 @@ const PORT: number = Number(process.env.PORT) || 3000;
 const HOST: string = process.env.HOST || "localhost";
 
 app.listen(PORT, HOST, async () => {
-    console.log(`server running http://${HOST}:${PORT}`);
+    console.log(`server running https://${HOST}:${PORT}`);
+    await connect(String(process.env.MONGO_URI));
 });
