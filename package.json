@@ -1,0 +1,26 @@
+{
+  "name": "package.json",
+  "version": "1.0.0",
+  "description": "holding required packages for this project",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NawafSwe/PaymentSystem.git"
+  },
+  "keywords": [
+    "Payment",
+    "PaymentSystem",
+    "api",
+    "nodejs",
+    "typescript"
+  ],
+  "author": "Nawaf Alsharqi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NawafSwe/PaymentSystem/issues"
+  },
+  "homepage": "https://github.com/NawafSwe/PaymentSystem#readme"
+}
