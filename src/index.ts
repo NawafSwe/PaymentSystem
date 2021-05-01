@@ -1,11 +1,12 @@
 // importing packages
 import {Response, Request, NextFunction, Router, Express, Application} from 'express';
 import {connect} from "./configs/db.config";
+import {envConfig} from './configs/vars.config';
+
 
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const dotenv = require('dotenv');
 const app: Application = express();
 
 // config express app
@@ -18,7 +19,7 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
 });
 
 // config the port and host
-dotenv.config();
+envConfig();
 const PORT: number = Number(process.env.PORT) || 3000;
 const HOST: string = process.env.HOST || "localhost";
 
