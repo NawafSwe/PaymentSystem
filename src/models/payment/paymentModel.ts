@@ -7,7 +7,8 @@ const schema: Schema = new mongoose.Schema({
     _customerId: {required: true, type: Schema.Types.ObjectId, ref: 'user'},
     amount: {required: true, type: Number},
     currency: {required: true, type: String},
-    dueDate: {type: Date, default: Date() + 30 * 24 * 60 * 60 * 1000},
+    // assuming due date is now for testing
+    dueDate: {type: Date, default: Date()},
     paidDate: {type: Date, required: false},
     isDeleted: {type: Boolean, default: false},
     status: {type: String, default: 'NC'}

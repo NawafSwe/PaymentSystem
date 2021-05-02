@@ -5,8 +5,8 @@ import nodemailer from 'nodemailer';
 let cron = require('node-cron');
 // mail options
 let mailOptions = {
-    from: '<From_Email_Address',
-    to: '<TO_Email_Address',
+    from: 'Test',
+    to: '',
     subject: 'Payment information',
     text: `<b>Dear Payment is overdue</b>`
 };
@@ -14,8 +14,10 @@ let mailOptions = {
 
 // transporter to transport the email
 let transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: process.env.API_EMAIL_PROVIDER,
     secure: true,
+    host: 'smtp.gmail.com',
+    port: 465,
     auth: {
         user: process.env.API_GUARD,
         pass: process.env.API_GUARD_PASS
@@ -24,7 +26,7 @@ let transporter = nodemailer.createTransport({
 
 async function sendEmail(mailOptions: any) {
     try {
-        const response = await transporter.sendMail(mailOptions);
+        await transporter.sendMail(mailOptions);
         console.log(`sent`);
     } catch (error: any) {
         console.log(`error happened during ${error.message}`);
@@ -32,18 +34,17 @@ async function sendEmail(mailOptions: any) {
 
 }
 
-export async function scheduleEmail(email: any, date: Date) {
+export async function scheduleEmail(email: string, date: Date) {
     try {
-        // monthly cron
-        // cron.schedule(`* * * * ${month}`, () => {
-        //     sendEmail(email);
-        // });
-
         const {day, month} = structureDate(date);
-        console.log(`${day}, ${month}`);
-        // cron.schedule(`* * * ${month} ${day}`, () => {
-        //     console.log(`sent email`);
-        // });
+        cron.schedule(`* * * ${month} ${day}`, () => {
+            mailOptions.to = email;
+            sendEmail(mailOptions);
+            // after sending an email remove this corn
+
+        });
+
+
     } catch (error: any) {
         console.log(`error happened in scheduleEmail error: ${error.message} `);
     }

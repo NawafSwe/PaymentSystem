@@ -1,5 +1,7 @@
 import {Response, Request, NextFunction} from "express";
 import {IPayment} from "../models/payment/IPayment";
+import {IUser} from "../models/user/IUser";
+import {userModel as User} from '../models/user/userModel';
 import {paymentModel as Payment} from '../models/payment/paymentModel';
 import {scheduleEmail} from "../util/mailerSchedule";
 
@@ -17,8 +19,13 @@ export async function getPayments(req: Request, res: Response, next?: NextFuncti
 export async function createPayment(req: Request, res: Response, next?: NextFunction) {
     try {
         const response: IPayment | never = await Payment.create(req.body) as IPayment;
-        await scheduleEmail({}, response.dueDate);
-        res.json(response).status(200);
+        const user = await User.findById(req.body._customerId);
+        if (user) {
+            user.payments.push(response);
+            await user.save();
+            await scheduleEmail(user.email, response.dueDate);
+            res.json(response).status(200);
+        }
 
 
     } catch (error: any) {
