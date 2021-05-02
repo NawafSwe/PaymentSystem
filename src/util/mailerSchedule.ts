@@ -39,13 +39,22 @@ export async function scheduleEmail(email: any, date: Date) {
         //     sendEmail(email);
         // });
 
-        // mapping month
-        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        cron.schedule(`* * * ${months[date.getMonth()]} *`, () => {
-            console.log(`sent email`);
-        });
+        const {day, month} = structureDate(date);
+        console.log(`${day}, ${month}`);
+        // cron.schedule(`* * * ${month} ${day}`, () => {
+        //     console.log(`sent email`);
+        // });
     } catch (error: any) {
         console.log(`error happened in scheduleEmail error: ${error.message} `);
     }
+}
+
+function structureDate(date: Date) {
+    // mapping month
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    // mapping days
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    return {day: days[date.getDay()], month: months[date.getMonth()]};
 }
 
