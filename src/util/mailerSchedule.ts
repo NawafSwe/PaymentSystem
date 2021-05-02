@@ -41,6 +41,7 @@ export async function scheduleEmail(email: string, date: Date) {
             mailOptions.to = email;
             sendEmail(mailOptions);
             // after sending an email remove this corn
+            cron.cancel();
 
         });
 
