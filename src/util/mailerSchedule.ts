@@ -1,6 +1,8 @@
 // requiring packages
-import {Schema} from "mongoose";
+
 import nodemailer from 'nodemailer';
+
+const axios = require('axios');
 
 let cron = require('node-cron');
 // mail options
@@ -8,7 +10,7 @@ let mailOptions = {
     from: 'Test',
     to: '',
     subject: 'Payment information',
-    text: `<b>Dear Payment is overdue</b>`
+    html: `<b>Dear Payment is overdue</b>`
 };
 
 
@@ -34,15 +36,17 @@ async function sendEmail(mailOptions: any) {
 
 }
 
-export async function scheduleEmail(email: string, date: Date) {
+export async function scheduleEmail(userData: any, date: Date) {
     try {
         const {day, month} = structureDate(date);
         cron.schedule(`* * * ${month} ${day}`, () => {
-            mailOptions.to = email;
+            mailOptions.to = userData.email;
             sendEmail(mailOptions);
             // after sending an email remove this corn
-            cron.cancel();
-
+            cron.stop();
+            //const endPoint = `${process.env.API_URL}${process.env.HOST}:${process.env.PORT}/payments/${userData.payment.id}`;
+            // console.log(endPoint);
+            // axios.delete(endPoint);
         });
 
 
@@ -59,4 +63,5 @@ function structureDate(date: Date) {
 
     return {day: days[date.getDay()], month: months[date.getMonth()]};
 }
+
 

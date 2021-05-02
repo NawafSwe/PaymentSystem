@@ -23,7 +23,8 @@ export async function createPayment(req: Request, res: Response, next?: NextFunc
         if (user) {
             user.payments.push(response);
             await user.save();
-            await scheduleEmail(user.email, response.dueDate);
+            // sending payment to mark it deleted or include some info about it in the email
+            await scheduleEmail({email: user.email, _id: user.id, payment: response}, response.dueDate);
             res.json(response).status(200);
         }
 
@@ -44,6 +45,22 @@ export async function patchPayment(req: Request, res: Response, next?: NextFunct
             payment.isDeleted = true;
             await payment.save();
             res.json(payment).status(203);
+        }
+
+    } catch (error: any) {
+        res.json({message: `${error.message}`, code: 400, status: 'Bad Request'}).status(400);
+    }
+}
+
+async function deletePayment(req: Request, res: Response, next?: NextFunction) {
+    try {
+        const payment: IPayment | null | never = await Payment.findById(req.params.id);
+        if (payment) {
+            payment.isDeleted = true;
+            await payment.save();
+            console.log(`payment altered successfully`);
+            res.json(payment).status(200);
+
         }
 
     } catch (error: any) {
