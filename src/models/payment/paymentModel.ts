@@ -7,7 +7,9 @@ const schema: Schema = new mongoose.Schema({
     amount: {required: true, type: Number},
     currency: {required: true, type: String},
     dueDate: {type: Date, default: Date() + 30 * 24 * 60 * 60 * 1000},
-    paidDate: {type: Date, required: true}
+    paidDate: {type: Date, required: true},
+    isDeleted: {type: Boolean, default: false}
+
 
 });
 

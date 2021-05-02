@@ -4,6 +4,7 @@ import {connect} from "./configs/db.config";
 import {envConfig} from './configs/vars.config';
 
 
+
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -26,7 +27,10 @@ const HOST: string = process.env.HOST || "localhost";
 // importing routes
 
 import {route as userRoute} from './routes/userRoute';
+import {route as paymentRoute} from './routes/paymentRoute';
+
 app.use('/users', userRoute);
+app.use('/payments', paymentRoute);
 
 app.listen(PORT, HOST, async () => {
     console.log(`server running https://${HOST}:${PORT}`);

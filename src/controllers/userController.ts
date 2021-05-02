@@ -15,7 +15,7 @@ export async function getUsers(req: Request, res: Response, next?: NextFunction)
 
 export async function createUser(req: Request, res: Response, next?: NextFunction) {
     try {
-        res.json(await User.create(req.body)).status(201);
+        res.json(await User.create<IUser>(req.body)).status(201);
     } catch (error: any) {
         res.json({message: `${error.message}`, code: 400, status: 'Bad Request'})
             .status(400);
@@ -26,7 +26,7 @@ export async function getUserById(req: Request, res: Response, next?: NextFuncti
     try {
         res.json(await User.findById(req.params.id));
     } catch (error: any) {
-        res.json().status(400);
+        res.json({message: `${error.message}`, code: 400, status: 'Bad Request'}).status(400);
     }
 }
 

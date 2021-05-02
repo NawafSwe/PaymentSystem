@@ -7,5 +7,6 @@ export interface IPayment extends Document {
     status: string;
     dueDate: Date;
     paidDate: Date;
+    isDeleted: boolean;
 
 }
