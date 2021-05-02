@@ -1,5 +1,5 @@
 /**
- * @module src/util/mailerSchedule
+ * @module src/util/mailerSchedule.ts
  * @description module tp orchestrate the email service for payment system
  * @requires {nodemailer,nodeScheduler}
  */

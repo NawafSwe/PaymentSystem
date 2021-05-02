@@ -1,5 +1,12 @@
-// importing packages
-import {Response, Request, NextFunction, Router, Express, Application} from 'express';
+/**
+ * @module src/index.ts
+ * @description entrypoint for node application
+ * @requires{Response,Request,NextFunction,Application,express,cors,helmet}
+ * @requires{connect,envConfig}
+ * @requires {userRoute,paymentRoute}
+ */
+
+import {Response, Request, NextFunction, Application} from 'express';
 import {connect} from "./configs/db.config";
 import {envConfig} from './configs/vars.config';
 
@@ -19,17 +26,28 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 // config the port and host
 envConfig();
+/**
+ * @namespace PORT
+ * @description port number
+ */
 const PORT: number = Number(process.env.PORT) || 3000;
+/**
+ * @namespace HOST
+ * @description hostname
+ */
 const HOST: string = process.env.HOST || "localhost";
 
 // importing routes
 import {route as userRoute} from './routes/userRoute';
 import {route as paymentRoute} from './routes/paymentRoute';
 
+// user routing
 app.use('/users', userRoute);
+// payment routing
 //user/:id/payments for restful api
 app.use('/payments', paymentRoute);
 
+// establishing connection with given host and port
 app.listen(PORT, HOST, async () => {
     console.log(`server running https://${HOST}:${PORT}`);
     await connect(String(process.env.MONGO_URI));
