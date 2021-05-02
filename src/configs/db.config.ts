@@ -4,6 +4,10 @@
  * @description this module is related to database configuration and connection
  */
 
+/**
+ * @namespace Mongoose
+ * @description node module to get benefit of database functionalities
+ */
 import Mongoose from 'mongoose';
 
 /**
