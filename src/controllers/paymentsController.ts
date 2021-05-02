@@ -43,7 +43,12 @@ export async function createPayment(req: Request, res: Response, next?: NextFunc
     }
 }
 
-export async function getPaymentById() {
+export async function getPaymentById(req: Request, res: Response, next?: NextFunction) {
+    try {
+        res.json(await Payment.findById(req.params.id)).status(200);
+    } catch (error: any) {
+        res.json({message: `${error.message}`, code: 400, status: 'Bad Request'}).status(400);
+    }
 }
 
 // used to patch payment to change it partially and make its status deleted
@@ -61,7 +66,7 @@ export async function patchPayment(req: Request, res: Response, next?: NextFunct
     }
 }
 
-async function deletePayment(req: Request, res: Response, next?: NextFunction) {
+export async function deletePayment(req: Request, res: Response, next?: NextFunction) {
     try {
         const payment: IPayment | null | never = await Payment.findById(req.params.id);
         if (payment) {
