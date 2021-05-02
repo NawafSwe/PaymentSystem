@@ -29,7 +29,7 @@ async function sendEmail(mailOptions: any) {
         await transporter.sendMail(mailOptions);
         console.log(`sent`);
     } catch (error: any) {
-        console.log(`error happened during ${error.message}`);
+        console.log(`error happened during sending email  ${error.message}`);
     }
 
 }
@@ -42,6 +42,7 @@ export async function scheduleEmail(userData: any, date: Date) {
             sendEmail(mailOptions);
             // after sending an email invalidate this job
             job.cancel();
+            console.log(`job canceled for user with id ${userData._id}`);
         });
 
 
