@@ -39,14 +39,14 @@ async function sendEmail(mailOptions: any) {
 export async function scheduleEmail(userData: any, date: Date) {
     try {
         const {day, month} = structureDate(date);
-        cron.schedule(`* * * ${month} ${day}`, () => {
+        let job = cron.schedule(`* * * ${month} ${day}`, () => {
             mailOptions.to = userData.email;
             sendEmail(mailOptions);
             // after sending an email remove this corn
-            cron.stop();
-            //const endPoint = `${process.env.API_URL}${process.env.HOST}:${process.env.PORT}/payments/${userData.payment.id}`;
-            // console.log(endPoint);
-            // axios.delete(endPoint);
+            const endPoint = `${process.env.API_URL}${process.env.HOST}:${process.env.PORT}/payments/${userData.payment.id}`;
+            console.log(endPoint);
+            axios.delete(endPoint);
+
         });
 
 

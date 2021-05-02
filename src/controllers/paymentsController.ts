@@ -21,11 +21,20 @@ export async function createPayment(req: Request, res: Response, next?: NextFunc
         const response: IPayment | never = await Payment.create(req.body) as IPayment;
         const user = await User.findById(req.body._customerId);
         if (user) {
-            user.payments.push(response);
-            await user.save();
-            // sending payment to mark it deleted or include some info about it in the email
-            await scheduleEmail({email: user.email, _id: user.id, payment: response}, response.dueDate);
-            res.json(response).status(200);
+            let validPayment = await canHavePayment(user.payments);
+            if (validPayment) {
+                user.payments.push(response);
+                await user.save();
+                // sending payment to mark it deleted or include some info about it in the email
+                await scheduleEmail({email: user.email, _id: user.id, payment: response}, response.dueDate);
+                res.json(response).status(200);
+            } else {
+                res.json({
+                    message: 'you cannot have more than one active payment',
+                    code: 406,
+                    status: 'Not Accepted'
+                }).status(406);
+            }
         }
 
 
@@ -66,4 +75,15 @@ async function deletePayment(req: Request, res: Response, next?: NextFunction) {
     } catch (error: any) {
         res.json({message: `${error.message}`, code: 400, status: 'Bad Request'}).status(400);
     }
+}
+
+async function canHavePayment(payments: IPayment[]): Promise<Boolean> {
+    // assuming user does not have active payment
+    let activePayment = false;
+    for (let payment of payments) {
+        if (!payment.isDeleted) {
+            return !activePayment;
+        }
+    }
+    return activePayment;
 }
