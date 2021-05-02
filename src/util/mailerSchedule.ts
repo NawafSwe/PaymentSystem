@@ -37,10 +37,11 @@ async function sendEmail(mailOptions: any) {
 export async function scheduleEmail(userData: any, date: Date) {
     try {
 
-        let job = nodeScheduler.scheduleJob(date, () => {
+        let job = nodeScheduler.scheduleJob('* * * * 1', () => {
             mailOptions.to = userData.email;
             sendEmail(mailOptions);
-            // after sending an email remove this corn
+            // after sending an email invalidate this job
+            job.cancel();
         });
 
 
