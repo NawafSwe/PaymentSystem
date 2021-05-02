@@ -1,3 +1,8 @@
+/**
+ * @module src/models/payment/IPayment
+ * @description module to structure the data for payment
+ * @requires Document
+ */
 import {Document} from "mongoose";
 
 export interface IPayment extends Document {
