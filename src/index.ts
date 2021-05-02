@@ -3,8 +3,6 @@ import {Response, Request, NextFunction, Router, Express, Application} from 'exp
 import {connect} from "./configs/db.config";
 import {envConfig} from './configs/vars.config';
 
-
-
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -25,7 +23,6 @@ const PORT: number = Number(process.env.PORT) || 3000;
 const HOST: string = process.env.HOST || "localhost";
 
 // importing routes
-
 import {route as userRoute} from './routes/userRoute';
 import {route as paymentRoute} from './routes/paymentRoute';
 

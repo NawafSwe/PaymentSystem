@@ -12,7 +12,6 @@ const schema: Schema = new mongoose.Schema({
     isDeleted: {type: Boolean, default: false},
     status: {type: String, default: 'NC'}
 
-
 });
 
 export const paymentModel: Model<IPayment> = model<IPayment>('payment', schema);
