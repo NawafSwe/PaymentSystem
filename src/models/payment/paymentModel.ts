@@ -1,16 +1,16 @@
 /**
- * @module src/models/payment/IPayment
+ * @module src/models/payment/paymentModel
  * @description module to create mongodb collection
  * @requires IPayment
  * @requires {Mongoose,Schema,Model,model}
  */
 
 import {IPayment} from "./IPayment";
-import * as mongoose from 'mongoose';
+
 import {Schema, Model, model, Mongoose} from "mongoose";
 
 
-const schema: Schema = new mongoose.Schema({
+const schema: Schema = new Schema({
     _customerId: {required: true, type: Schema.Types.ObjectId, ref: 'user'},
     amount: {required: true, type: Number},
     currency: {required: true, type: String},

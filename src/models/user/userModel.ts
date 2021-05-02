@@ -1,3 +1,10 @@
+/**
+ * @module src/models/payment/userModel
+ * @description module to create mongodb collection
+ * @requires IUser
+ * @requires {Mongoose,Schema,Model,model}
+ */
+
 import {Schema, Model, model} from "mongoose";
 import {IUser} from "./IUser";
 
