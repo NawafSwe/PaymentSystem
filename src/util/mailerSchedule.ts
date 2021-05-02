@@ -43,10 +43,6 @@ export async function scheduleEmail(userData: any, date: Date) {
             mailOptions.to = userData.email;
             sendEmail(mailOptions);
             // after sending an email remove this corn
-            const endPoint = `${process.env.API_URL}${process.env.HOST}:${process.env.PORT}/payments/${userData.payment.id}`;
-            console.log(endPoint);
-            axios.delete(endPoint);
-
         });
 
 
