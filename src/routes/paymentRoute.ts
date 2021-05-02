@@ -6,3 +6,6 @@ route.get('/', getPayments);
 route.post('/', createPayment);
 // patch to do soft delete
 route.patch('/:id', patchPayment);
+
+
+

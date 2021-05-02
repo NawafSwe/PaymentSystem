@@ -16,8 +16,8 @@ export async function getPayments(req: Request, res: Response, next?: NextFuncti
 
 export async function createPayment(req: Request, res: Response, next?: NextFunction) {
     try {
-        const response = await Payment.create<IPayment>(req.body);
-        await scheduleEmail({}, '');
+        const response: IPayment | never = await Payment.create(req.body) as IPayment;
+        await scheduleEmail({}, response.dueDate);
         res.json(response).status(200);
 
 

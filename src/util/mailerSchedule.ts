@@ -1,4 +1,5 @@
 // requiring packages
+import {Schema} from "mongoose";
 import nodemailer from 'nodemailer';
 
 let cron = require('node-cron');
@@ -31,21 +32,18 @@ async function sendEmail(mailOptions: any) {
 
 }
 
-export async function scheduleEmail(email: any, month: string) {
+export async function scheduleEmail(email: any, date: Date) {
     try {
         // monthly cron
         // cron.schedule(`* * * * ${month}`, () => {
         //     sendEmail(email);
         // });
 
-        // trying it for 5 min
-        cron.schedule(`0 1 * * *`, () => {
+        // mapping month
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        cron.schedule(`* * * ${months[date.getMonth()]} *`, () => {
             console.log(`sent email`);
         });
-
-        console.log(`scheduled successfully`);
-
-
     } catch (error: any) {
         console.log(`error happened in scheduleEmail error: ${error.message} `);
     }

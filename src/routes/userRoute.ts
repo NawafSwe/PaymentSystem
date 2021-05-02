@@ -8,3 +8,5 @@ import {getUsers, createUser, getUserById} from "../controllers/userController";
 route.get('/', [getUsers]);
 route.post('/', createUser);
 route.get('/:id', getUserById);
+
+

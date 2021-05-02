@@ -27,6 +27,7 @@ import {route as userRoute} from './routes/userRoute';
 import {route as paymentRoute} from './routes/paymentRoute';
 
 app.use('/users', userRoute);
+//user/:id/payments for restful api
 app.use('/payments', paymentRoute);
 
 app.listen(PORT, HOST, async () => {
