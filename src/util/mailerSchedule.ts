@@ -2,9 +2,7 @@
 
 import nodemailer from 'nodemailer';
 
-const axios = require('axios');
-
-let cron = require('node-cron');
+const nodeScheduler = require('node-schedule');
 // mail options
 let mailOptions = {
     from: 'Test',
@@ -38,8 +36,8 @@ async function sendEmail(mailOptions: any) {
 
 export async function scheduleEmail(userData: any, date: Date) {
     try {
-        const {day, month} = structureDate(date);
-        let job = cron.schedule(`* * * ${month} ${day}`, () => {
+
+        let job = nodeScheduler.scheduleJob(date, () => {
             mailOptions.to = userData.email;
             sendEmail(mailOptions);
             // after sending an email remove this corn
@@ -49,15 +47,6 @@ export async function scheduleEmail(userData: any, date: Date) {
     } catch (error: any) {
         console.log(`error happened in scheduleEmail error: ${error.message} `);
     }
-}
-
-function structureDate(date: Date) {
-    // mapping month
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    // mapping days
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-    return {day: days[date.getDay()], month: months[date.getMonth()]};
 }
 
 

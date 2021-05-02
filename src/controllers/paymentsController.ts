@@ -5,7 +5,15 @@ import {userModel as User} from '../models/user/userModel';
 import {paymentModel as Payment} from '../models/payment/paymentModel';
 import {scheduleEmail} from "../util/mailerSchedule";
 
-
+/**
+ * @async
+ * @function
+ * @namespace getPayments
+ * @param req express request
+ * @param res express response
+ * @param next next func
+ * @description getting all payments from database
+ */
 export async function getPayments(req: Request, res: Response, next?: NextFunction) {
     try {
         // finding all payments with user
