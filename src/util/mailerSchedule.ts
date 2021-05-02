@@ -1,9 +1,22 @@
-// requiring packages
+/**
+ * @module src/util/mailerSchedule
+ * @description module tp orchestrate the email service for payment system
+ * @requires {nodemailer,nodeScheduler}
+ */
 import nodemailer from 'nodemailer';
 
 const nodeScheduler = require('node-schedule');
 
 
+/**
+ * @async
+ * @function
+ * @namespace sendEmail
+ * @param mailOptions option for the email
+ * @description sending email for particular user
+ * @returns Promise<void|never> void function
+ * @throws error throws an error if there is any
+ */
 async function sendEmail(mailOptions: any) {
     try {
         // transporter to transport the email
@@ -25,6 +38,15 @@ async function sendEmail(mailOptions: any) {
 
 }
 
+/**
+ * @async
+ * @function
+ * @namespace scheduleEmail
+ * @param userData payments and user id
+ * @param date date of the sending email
+ * @returns Promise<void|never> return nothing
+ * @throws error if there is any error
+ */
 export async function scheduleEmail(userData: any, date: Date) {
     try {
 
@@ -50,6 +72,12 @@ export async function scheduleEmail(userData: any, date: Date) {
     }
 }
 
+/**
+ * @function
+ * @namespace prepareEmail
+ * @param deliverTo person email
+ * @returns Object json object holds email info
+ */
 function prepareEmail(deliverTo: string): any {
     // mail options
     return {
