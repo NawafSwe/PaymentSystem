@@ -1,6 +1,7 @@
 import {Response, Request, NextFunction} from "express";
 import {IPayment} from "../models/payment/IPayment";
 import {paymentModel as Payment} from '../models/payment/paymentModel';
+import {scheduleEmail} from "../util/mailerSchedule";
 
 
 export async function getPayments(req: Request, res: Response, next?: NextFunction) {
@@ -15,7 +16,10 @@ export async function getPayments(req: Request, res: Response, next?: NextFuncti
 
 export async function createPayment(req: Request, res: Response, next?: NextFunction) {
     try {
-        res.json(await Payment.create<IPayment>(req.body));
+        const response = await Payment.create<IPayment>(req.body);
+        await scheduleEmail({}, '');
+        res.json(response).status(200);
+
 
     } catch (error: any) {
         res.json({message: `${error.message}`, code: 400, status: 'Bad Request'}).status(400);

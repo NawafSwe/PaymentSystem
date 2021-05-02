@@ -1,6 +1,7 @@
 // requiring packages
 import nodemailer from 'nodemailer';
 
+let cron = require('node-cron');
 // mail options
 let mailOptions = {
     from: '<From_Email_Address',
@@ -13,6 +14,7 @@ let mailOptions = {
 // transporter to transport the email
 let transporter = nodemailer.createTransport({
     service: 'gmail',
+    secure: true,
     auth: {
         user: process.env.API_GUARD,
         pass: process.env.API_GUARD_PASS
@@ -28,3 +30,24 @@ async function sendEmail(mailOptions: any) {
     }
 
 }
+
+export async function scheduleEmail(email: any, month: string) {
+    try {
+        // monthly cron
+        // cron.schedule(`* * * * ${month}`, () => {
+        //     sendEmail(email);
+        // });
+
+        // trying it for 5 min
+        cron.schedule(`0 1 * * *`, () => {
+            console.log(`sent email`);
+        });
+
+        console.log(`scheduled successfully`);
+
+
+    } catch (error: any) {
+        console.log(`error happened in scheduleEmail error: ${error.message} `);
+    }
+}
+
