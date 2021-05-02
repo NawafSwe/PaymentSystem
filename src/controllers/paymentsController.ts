@@ -18,11 +18,11 @@ export async function getPayments(req: Request, res: Response, next?: NextFuncti
 
 export async function createPayment(req: Request, res: Response, next?: NextFunction) {
     try {
-        const response: IPayment | never = await Payment.create(req.body) as IPayment;
         const user = await User.findById(req.body._customerId);
         if (user) {
             let validPayment = await canHavePayment(user.payments);
             if (validPayment) {
+                const response: IPayment | never = await Payment.create(req.body) as IPayment;
                 user.payments.push(response);
                 await user.save();
                 // sending payment to mark it deleted or include some info about it in the email
@@ -82,8 +82,9 @@ async function canHavePayment(payments: IPayment[]): Promise<Boolean> {
     let activePayment = false;
     for (let payment of payments) {
         if (!payment.isDeleted) {
-            return !activePayment;
+            return activePayment;
         }
     }
-    return activePayment;
+    // if we did not find any not deleted payment means there is no active payment for the user
+    return !activePayment;
 }
