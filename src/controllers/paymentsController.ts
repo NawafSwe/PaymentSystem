@@ -1,6 +1,16 @@
+/**
+ * @module src/controllers/paymentController.ts
+ * @description module orchestrate the payment collection with the database and send responses back to client
+ * @requires {Response,Request,NextFunction}
+ * @requires IPayment
+ * @requires User
+ * @requires Payment
+ * @requires scheduleEmail
+ */
+
+
 import {Response, Request, NextFunction} from "express";
 import {IPayment} from "../models/payment/IPayment";
-import {IUser} from "../models/user/IUser";
 import {userModel as User} from '../models/user/userModel';
 import {paymentModel as Payment} from '../models/payment/paymentModel';
 import {scheduleEmail} from "../util/mailerSchedule";
@@ -13,6 +23,7 @@ import {scheduleEmail} from "../util/mailerSchedule";
  * @param res express response
  * @param next next func
  * @description getting all payments from database
+ * @returns Promise<void> nothing returned it is only sending response back to the client
  */
 export async function getPayments(req: Request, res: Response, next?: NextFunction) {
     try {
@@ -23,6 +34,17 @@ export async function getPayments(req: Request, res: Response, next?: NextFuncti
         res.json({message: `${error.message}`, code: 400, status: 'Bad Request'}).status(400);
     }
 }
+
+/**
+ * @async
+ * @function
+ * @namespace createPayment
+ * @param req express request
+ * @param res express response
+ * @param next next func
+ * @description creating new payment to the database
+ * @returns Promise<void> nothing returned it is only sending response back to the client
+ */
 
 export async function createPayment(req: Request, res: Response, next?: NextFunction) {
     try {
@@ -51,6 +73,18 @@ export async function createPayment(req: Request, res: Response, next?: NextFunc
     }
 }
 
+
+/**
+ * @async
+ * @function
+ * @namespace getPaymentById
+ * @param req express request
+ * @param res express response
+ * @param next next func
+ * @description getting payment by id from database
+ * @returns Promise<void> nothing returned it is only sending response back to the client
+ */
+
 export async function getPaymentById(req: Request, res: Response, next?: NextFunction) {
     try {
         res.json(await Payment.findById(req.params.id)).status(200);
@@ -59,7 +93,16 @@ export async function getPaymentById(req: Request, res: Response, next?: NextFun
     }
 }
 
-// used to patch payment to change it partially and make its status deleted
+/**
+ * @async
+ * @function
+ * @namespace patchPayment
+ * @param req express request
+ * @param res express response
+ * @param next next func
+ * @description edit payment information partially
+ * @returns Promise<void> nothing returned it is only sending response back to the client
+ */
 export async function patchPayment(req: Request, res: Response, next?: NextFunction) {
     try {
         const payment: IPayment | never | null = await Payment.findById(req.params.id).populate('_customerId').exec();
@@ -73,6 +116,18 @@ export async function patchPayment(req: Request, res: Response, next?: NextFunct
         res.json({message: `${error.message}`, code: 400, status: 'Bad Request'}).status(400);
     }
 }
+
+
+/**
+ * @async
+ * @function
+ * @namespace deletePayment
+ * @param req express request
+ * @param res express response
+ * @param next next func
+ * @description mark payment as deleted
+ * @returns Promise<void> nothing returned it is only sending response back to the client
+ */
 
 export async function deletePayment(req: Request, res: Response, next?: NextFunction) {
     try {
@@ -90,7 +145,16 @@ export async function deletePayment(req: Request, res: Response, next?: NextFunc
     }
 }
 
-async function canHavePayment(payments: IPayment[]): Promise<Boolean> {
+
+/**
+ * @async
+ * @function
+ * @namespace deletePayment
+ * @param payments list of payments
+ * @description checking whether user has active payment or not
+ * @returns Promise<boolean> nothing returned it is only sending response back to the client
+ */
+async function canHavePayment(payments: IPayment[]): Promise<boolean> {
     // assuming user does not have active payment
     let activePayment = false;
     for (let payment of payments) {
