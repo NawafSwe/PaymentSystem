@@ -2,14 +2,13 @@
   "name": "package.json",
   "version": "1.0.0",
   "description": "holding required packages for this project",
-  "main": "src/index.ts",
-  "type": "module",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf dist && tsc",
     "setup": "npm install && npm update",
     "dev": "NODE_ENV=development nodemon src/index.ts",
-    "start": " npm run build && node src/index.ts",
+    "start": " npm run build && NODE_ENV=production node dist/index.js",
     "start:prod": "npm run build && NODE_ENV=production node dist/index.js",
     "gen-doc": "typedoc"
   },
