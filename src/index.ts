@@ -19,9 +19,11 @@ const app: Application = express();
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
+app.use(express.static("docs"));
+app.set('view engine', 'html');
 
 app.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    res.json("works").status(200);
+    res.render('globals');
 });
 
 // config the port and host
