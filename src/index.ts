@@ -52,5 +52,6 @@ app.use('/payments', paymentRoute);
 // establishing connection with given host and port
 app.listen(PORT, HOST, async () => {
     console.log(`server running https://${HOST}:${PORT}`);
+    // connecting with mongoDB database when establishing a connection
     await connect(String(process.env.MONGO_URI));
 });
