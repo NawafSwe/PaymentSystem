@@ -67,11 +67,12 @@ export async function createPayment(req: Request, res: Response, next?: NextFunc
         }
 
     } catch (error: any) {
-        res.json(new APIError('Bad request',
-            HttpCode.BadRequest,
-            `server cannot serve requests in meanwhile if problem persist contact support team`,
-            error.message, false))
-            .status(400);
+        res.json(new APIError(
+            error.name,
+            error.httpCode,
+            error.message,
+            error.description, error.isOperational))
+            .status(error.status);
     }
 }
 
@@ -158,9 +159,8 @@ export async function deletePayment(req: Request, res: Response, next?: NextFunc
  */
 async function canHavePayment(payments: IPayment[]): Promise<void> | never {
     // assuming user does not have active payment
-    let activePayment = false;
     for (let payment of payments) {
-        if (payment.isDeleted) {
+        if (!payment.isDeleted) {
             // if user have active payment
             throw  new APIError('Not Accpeted', HttpCode.NotAccepted, 'user can have only one active payment in a month', 'user have active payment where only one payment accepted', false);
         }
