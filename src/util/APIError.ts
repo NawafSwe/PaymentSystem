@@ -45,3 +45,18 @@ export enum HttpCode {
     NotFound = 404,
     NotAccepted = 406,
 }
+
+
+ class ErrorHandler {
+
+    public isTrustedError(error: Error): boolean {
+        if (!(error instanceof APIError)) {
+            // then the error is not trusted so we need to stop the process
+            // return false
+            return false;
+        } else return error.isOperational;
+    }
+}
+
+// making Error handler singleton 'only one instance of it can be created'
+export const handler = new ErrorHandler();

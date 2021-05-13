@@ -26,6 +26,12 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
     res.render('globals');
 });
 
+// ---------------- process handling  ----------------//
+const {handler} = require('./util/APIError');
+// on uncaughException
+process.on('uncaughtException', (error: Error) => {
+    // we handle error here
+});
 // config the port and host
 envConfig();
 /**
