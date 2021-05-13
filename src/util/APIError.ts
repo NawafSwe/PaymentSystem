@@ -1,13 +1,21 @@
 export class APIError extends Error {
+
     public readonly name: string;
+
     public readonly httpCode: HttpCode;
+
     public readonly message: string;
-    /**
-     * @namespace isOperational
-     * @description it will be true if the error is from coding prespective and false if it is http error
-     */
+
     public readonly isOperational: boolean;
 
+    /**
+     *
+     * @param name of the server error such Not Found
+     * @param httpCode code of the error such 400 for bad request
+     * @param message for the client
+     * @param description
+     * @param isOperational it will be true if the error is from coding prespective and false if it is http error
+     */
     constructor(name: string, httpCode: HttpCode, message: string, description: string, isOperational: boolean) {
         super(description);
         // restore prototype chain
@@ -17,11 +25,15 @@ export class APIError extends Error {
         this.message = message;
         this.isOperational = isOperational;
 
-
         // capture error trace
         Error.captureStackTrace(this);
     }
 }
+
+/**
+ * @namespace HttpCode
+ * @description enum holds http codes with its names
+ */
 
 export enum HttpCode {
     Success = 200,
@@ -33,4 +45,3 @@ export enum HttpCode {
     NotFound = 404,
     NotAccepted = 406,
 }
-

@@ -34,7 +34,13 @@ export async function getPayments(req: Request, res: Response, next?: NextFuncti
         const payments = await Payment.find({}).populate('_customerId').exec();
         res.json(payments).status(200);
     } catch (error: any) {
-        res.json(new APIError(`Bad request`, HttpCode.BadRequest, 'server cannot serve requests in meanwhile if problem persist contact support team', `${error.message}`, false)).status(400);
+        res.json(new APIError(
+            `Bad request`,
+            HttpCode.BadRequest,
+            'server cannot serve requests in meanwhile if problem persist contact support team',
+            `${error.message}`,
+            false))
+            .status(400);
     }
 }
 
@@ -67,6 +73,7 @@ export async function createPayment(req: Request, res: Response, next?: NextFunc
         }
 
     } catch (error: any) {
+        // reciving error that have been throgut from the code above or any
         res.json(new APIError(
             error.name,
             error.httpCode,
@@ -162,7 +169,11 @@ async function canHavePayment(payments: IPayment[]): Promise<void> | never {
     for (let payment of payments) {
         if (!payment.isDeleted) {
             // if user have active payment
-            throw  new APIError('Not Accpeted', HttpCode.NotAccepted, 'user can have only one active payment in a month', 'user have active payment where only one payment accepted', false);
+            throw  new APIError('Not Accpeted',
+                HttpCode.NotAccepted,
+                'user can have only one active payment in a month',
+                'user have active payment where only one payment accepted',
+                false);
         }
     }
 
