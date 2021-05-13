@@ -6,6 +6,8 @@
  * @requires User
  * @requires Payment
  * @requires scheduleEmail
+ * @requires APIError
+ * @requires HttpCode
  */
 
 
@@ -14,6 +16,7 @@ import {IPayment} from "../models/payment/IPayment";
 import {userModel as User} from '../models/user/userModel';
 import {paymentModel as Payment} from '../models/payment/paymentModel';
 import {scheduleEmail} from "../util/mailerSchedule";
+import {APIError, HttpCode} from '../util/APIError';
 
 /**
  * @async
@@ -25,13 +28,13 @@ import {scheduleEmail} from "../util/mailerSchedule";
  * @description getting all payments from database
  * @returns Promise<void> nothing returned it is only sending response back to the client
  */
-export async function getPayments(req: Request, res: Response, next?: NextFunction) {
+export async function getPayments(req: Request, res: Response, next?: NextFunction): Promise<void> {
     try {
         // finding all payments with user
         const payments = await Payment.find({}).populate('_customerId').exec();
         res.json(payments).status(200);
     } catch (error: any) {
-        res.json({message: `${error.message}`, code: 400, status: 'Bad Request'}).status(400);
+        res.json(new APIError(`Bad request`, HttpCode.BadRequest, 'server cannot serve requests in meanwhile if problem persist contact support team', `${error.message}`, false)).status(400);
     }
 }
 
@@ -50,26 +53,25 @@ export async function createPayment(req: Request, res: Response, next?: NextFunc
     try {
         const user = await User.findById(req.body._customerId);
         if (user) {
-            let validPayment = await canHavePayment(user.payments);
-            if (validPayment) {
-                const response: IPayment | never = await Payment.create(req.body) as IPayment;
-                user.payments.push(response);
-                await user.save();
-                // sending payment to mark it deleted or include some info about it in the email
-                await scheduleEmail({email: user.email, _id: user.id, payment: response}, response.dueDate);
-                res.json(response).status(200);
-            } else {
-                res.json({
-                    message: 'you cannot have more than one active payment',
-                    code: 406,
-                    status: 'Not Accepted'
-                }).status(406);
-            }
+            await canHavePayment(user.payments);
+            const response: IPayment | never = await Payment.create(req.body) as IPayment;
+            user.payments.push(response);
+            await user.save();
+            // sending payment to mark it deleted or include some info about it in the email
+            await scheduleEmail({email: user.email, _id: user.id, payment: response}, response.dueDate);
+            res.json(response).status(200);
+        } else {
+            // if user is not found
+            const customMessage = `user with id ${req.body._customerId} not found`;
+            throw new APIError('Not found', HttpCode.NotFound, customMessage, customMessage, false);
         }
 
-
     } catch (error: any) {
-        res.json({message: `${error.message}`, code: 400, status: 'Bad Request'}).status(400);
+        res.json(new APIError('Bad request',
+            HttpCode.BadRequest,
+            `server cannot serve requests in meanwhile if problem persist contact support team`,
+            error.message, false))
+            .status(400);
     }
 }
 
@@ -154,14 +156,15 @@ export async function deletePayment(req: Request, res: Response, next?: NextFunc
  * @description checking whether user has active payment or not
  * @returns Promise<boolean> nothing returned it is only sending response back to the client
  */
-async function canHavePayment(payments: IPayment[]): Promise<boolean> {
+async function canHavePayment(payments: IPayment[]): Promise<void> | never {
     // assuming user does not have active payment
     let activePayment = false;
     for (let payment of payments) {
-        if (!payment.isDeleted) {
-            return activePayment;
+        if (payment.isDeleted) {
+            // if user have active payment
+            throw  new APIError('Not Accpeted', HttpCode.NotAccepted, 'user can have only one active payment in a month', 'user have active payment where only one payment accepted', false);
         }
     }
-    // if we did not find any not deleted payment means there is no active payment for the user
-    return !activePayment;
+
+
 }
