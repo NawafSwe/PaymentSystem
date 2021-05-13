@@ -16,7 +16,7 @@ import {IPayment} from "../models/payment/IPayment";
 import {userModel as User} from '../models/user/userModel';
 import {paymentModel as Payment} from '../models/payment/paymentModel';
 import {scheduleEmail} from "../util/mailerSchedule";
-import {APIError, HttpCode} from '../util/APIError';
+import {APIError, HttpCode} from '../util/errors/APIError';
 
 /**
  * @async
@@ -73,7 +73,7 @@ export async function createPayment(req: Request, res: Response, next?: NextFunc
         }
 
     } catch (error: any) {
-        // reciving error that have been throgut from the code above or any
+        // receiving error that have been through from the code above or any
         res.json(new APIError(
             error.name,
             error.httpCode,
@@ -169,7 +169,7 @@ async function canHavePayment(payments: IPayment[]): Promise<void> | never {
     for (let payment of payments) {
         if (!payment.isDeleted) {
             // if user have active payment
-            throw  new APIError('Not Accpeted',
+            throw  new APIError('Not Accepted',
                 HttpCode.NotAccepted,
                 'user can have only one active payment in a month',
                 'user have active payment where only one payment accepted',
