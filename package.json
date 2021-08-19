@@ -35,7 +35,7 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.16.4",
-    "express-validator": "^6.6.1",
+    "express-validator": "^6.12.1",
     "helmet": "^4.2.0",
     "module-alias": "^2.2.2",
     "mongodb": "^3.6.3",
