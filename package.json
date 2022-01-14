@@ -39,7 +39,7 @@
     "express-validator": "^6.6.1",
     "helmet": "^4.6.0",
     "module-alias": "^2.2.2",
-    "mongodb": "^3.6.3",
+    "mongodb": "^3.7.3",
     "mongoose": "^6.0.4",
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.1",
