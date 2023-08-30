@@ -40,7 +40,7 @@
     "helmet": "^4.6.0",
     "module-alias": "^2.2.2",
     "mongodb": "^3.6.3",
-    "mongoose": "^6.0.4",
+    "mongoose": "^6.12.0",
     "morgan": "^1.10.0",
     "node-fetch": "^3.1.1",
     "node-schedule": "^2.0.0",
