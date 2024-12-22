@@ -27,7 +27,7 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
 });
 
 // ---------------- process handling  ----------------//
-const {handler} = require('./util/APIError');
+const {handler} = require('./util/errors/APIError');
 // on uncaughException
 process.on('uncaughtException', (error: Error) => {
     // we handle error here
@@ -57,7 +57,7 @@ app.use('/payments', paymentRoute);
 
 // establishing connection with given host and port
 app.listen(PORT, HOST, async () => {
-    console.log(`server running https://${HOST}:${PORT}`);
+    console.log(`server running http://${HOST}:${PORT}`);
     // connecting with mongoDB database when establishing a connection
     await connect(String(process.env.MONGO_URI));
 });

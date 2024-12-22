@@ -1,0 +1,43 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - HOST=localhost
+      - MONGO_URI=mongodb://mongo:27017/payment_system
+      - API_EMAIL_PROVIDER=${API_EMAIL_PROVIDER}
+      - API_GUARD=${API_GUARD}
+      - API_GUARD_PASS=${API_GUARD_PASS}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo:3.6
+    command: mongod --storageEngine=wiredTiger
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=payment_system
+    restart: unless-stopped
+    networks:
+      - app-network
+
+volumes:
+  mongodb_data:
+    name: payment_system_mongodb_data
+
+networks:
+  app-network:
+    driver: bridge
